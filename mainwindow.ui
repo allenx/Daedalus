@@ -13,38 +13,25 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="GameField" name="fieldWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>90</y>
-      <width>381</width>
-      <height>341</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QWidget" name="fuck" native="true">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>20</y>
-      <width>381</width>
-      <height>61</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
+  <action name="actionPreferences">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>GameField</class>
-   <extends>QWidget</extends>
-   <header>gamefield.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

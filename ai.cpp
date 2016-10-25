@@ -5,13 +5,21 @@ AI::AI() :
     mines(new FlatList),
     flaggedCount(0),
     board(Board()),
-    hand(new UserInteractionHandler)
+    _interactionHandler(new UserInteractionHandler),
+    _soundHandler(new SoundHandler)
 {
+
     if (board.isAllSet) {
         cells = initCells(board.rowCount, board.colCount);
     } else {
+        board.rowCount = 20;
+        board.colCount = 20;
+        board.mineCount = 100;
+        board.isAllSet = true;
         cells = initCells();
     }
+    _soundHandler->playBGM();
+    bindHandlerToAI(_interactionHandler, this);
 
 }
 
@@ -64,7 +72,8 @@ CellMatrix *AI::initCells(int rowCount, int columnCount) {
     for(int k = 1; k < rowCount + 1; ++k) {
         for (int l = 1; l < columnCount + 1; ++l) {
             auto foo = cells->at(k)->at(l);
-//            QObject::connect(foo, SIGNAL(clicked_left(Cell*)), this, SLOT(layMinesFoo(Cell*)));
+            //            QObject::connect(foo, SIGNAL(clicked_left(Cell*)), this, SLOT(layMinesFoo(Cell*)));
+            bindCellsToHandler(foo, _interactionHandler);
             foo->NorthWest = cells->at(k-1)->at(l-1);
             foo->North = cells->at(k-1)->at(l);
             foo->NorthEast = cells->at(k-1)->at(l+1);
@@ -81,7 +90,19 @@ CellMatrix *AI::initCells(int rowCount, int columnCount) {
 
 
 void AI::layMines(Cell *cell) {
-
+    int maxRow = cells->count() - 2;
+    int maxCol = cells->at(0)->count() - 2;
+    int foo = board.mineCount;
+    while (foo != 0) {
+        int randomRow = (qrand() % maxRow) + 1;
+        int randomCol = (qrand() % maxCol) + 1;
+        if ((randomRow != cell->coordinate.atRow) && (randomCol != cell->coordinate.atCol)) {
+            cells->at(randomRow)->at(randomCol)->isMine = true;
+            foo -= 1;
+        }
+    }
+    countNeighbourMines(cells);
+    qDebug("YO");
 }
 
 
@@ -114,6 +135,7 @@ void AI::countNeighbourMines(CellMatrix *cells) {
                 foo->content = -1;
                 continue;
             }
+            foo->content = 0;
             if (foo->North->isMine) {
                 foo->content += 1;
             }
@@ -151,26 +173,67 @@ void AI::revealCell(Cell *cell) {
 
     if (cell->status == revealed) {
 
-        if (cell->North->status == revealed) ++foo;
-        if (cell->NorthEast->status == revealed) ++foo;
-        if (cell->East->status == revealed) ++foo;
-        if (cell->SouthEast->status == revealed) ++foo;
-        if (cell->South->status == revealed) ++foo;
-        if (cell->SouthWest->status == revealed) ++foo;
-        if (cell->West->status == revealed) ++foo;
-        if (cell->NorthWest->status == revealed) ++foo;
+        FlatList *fooListToReveal = new FlatList;
+
+        if (cell->North->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->North);
+        }
+
+        if (cell->NorthEast->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->NorthEast);
+        }
+
+        if (cell->East->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->East);
+        }
+
+        if (cell->SouthEast->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->SouthEast);
+        }
+
+        if (cell->South->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->South);
+        }
+
+        if (cell->SouthWest->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->SouthWest);
+        }
+
+        if (cell->West->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->West);
+        }
+
+        if (cell->NorthWest->status == flagged) {
+            ++foo;
+        } else {
+            fooListToReveal->append(cell->NorthWest);
+        }
 
         if (foo == cell->content) {
 
-            revealCell(cell->NorthWest);
-            revealCell(cell->NorthEast);
-            revealCell(cell->SouthWest);
-            revealCell(cell->SouthEast);
+            for (int i=0; i<fooListToReveal->count(); ++i) {
+                if (fooListToReveal->at(i)->status != revealed) {
+                    revealCell(fooListToReveal->at(i));
+                }
+            }
         }
 
     } else {
-        cell->status = revealed;
-        cell->setText("fucker");
+        cell->setStatus(revealed);
 
         switch (cell->content) {
 
@@ -186,21 +249,63 @@ void AI::revealCell(Cell *cell) {
 
         default: {
 
-            if (cell->North->status == revealed) ++foo;
-            if (cell->NorthEast->status == revealed) ++foo;
-            if (cell->East->status == revealed) ++foo;
-            if (cell->SouthEast->status == revealed) ++foo;
-            if (cell->South->status == revealed) ++foo;
-            if (cell->SouthWest->status == revealed) ++foo;
-            if (cell->West->status == revealed) ++foo;
-            if (cell->NorthWest->status == revealed) ++foo;
+            FlatList *fooListToReveal = new FlatList;
+
+            if (cell->North->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->North);
+            }
+
+            if (cell->NorthEast->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->NorthEast);
+            }
+
+            if (cell->East->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->East);
+            }
+
+            if (cell->SouthEast->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->SouthEast);
+            }
+
+            if (cell->South->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->South);
+            }
+
+            if (cell->SouthWest->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->SouthWest);
+            }
+
+            if (cell->West->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->West);
+            }
+
+            if (cell->NorthWest->status == flagged) {
+                ++foo;
+            } else {
+                fooListToReveal->append(cell->NorthWest);
+            }
 
             if (foo == cell->content) {
 
-                revealCell(cell->NorthWest);
-                revealCell(cell->NorthEast);
-                revealCell(cell->SouthWest);
-                revealCell(cell->SouthEast);
+                for (int i=0; i<fooListToReveal->count(); ++i) {
+                    if (fooListToReveal->at(i)->status != revealed) {
+                        revealCell(fooListToReveal->at(i));
+                    }
+                }
             }
             break;
         }
@@ -215,9 +320,43 @@ void AI::revealCell(Cell *cell) {
 void AI::rightClickACell(Cell *cell) {
     switch (cell->status) {
     case virgin:
-
+        cell->setStatus(flagged);
         break;
+    case flagged:
+        cell->setStatus(questioned);
+    case questioned:
+        cell->setStatus(virgin);
     default:
         break;
     }
+}
+
+
+void AI::bindCellsToHandler(Cell *cell, UserInteractionHandler *interactionHandler) {
+    QObject::connect(cell, SIGNAL(statusChanged()), cell, SLOT(refreshUI()));
+
+    QObject::connect(cell, SIGNAL(clicked(Cell*,QMouseEvent*)), interactionHandler, SLOT(interactionReceived(Cell*,QMouseEvent*)));
+    QObject::connect(cell, SIGNAL(clicked_double(Cell*,QMouseEvent*)), interactionHandler, SLOT(interactionReceived_DoubleClick(Cell*,QMouseEvent*)));
+
+    //cell was revealed
+}
+
+
+void AI::bindHandlerToAI(UserInteractionHandler *interactionHandler, AI *ai) {
+    QObject::connect(interactionHandler, SIGNAL(clicked_left(Cell*)), ai, SLOT(revealCell(Cell*)));
+    QObject::connect(interactionHandler, SIGNAL(clicked_right(Cell*)), ai, SLOT(rightClickACell(Cell*)));
+    QObject::connect(interactionHandler, SIGNAL(clicked_double(Cell*)), ai, SLOT(revealCell(Cell*)));
+
+}
+
+
+
+
+void AI::pause() {
+
+}
+
+
+void AI::resume() {
+
 }

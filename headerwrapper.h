@@ -7,3 +7,4 @@
 #endif // HEADERWRAPPER_H
 
 #include "resources.h"
+

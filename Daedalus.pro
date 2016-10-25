@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,7 +19,9 @@ SOURCES += main.cpp\
     cell.cpp \
     gamefield.cpp \
     aboutpage.cpp \
-    userinteractionhandler.cpp
+    userinteractionhandler.cpp \
+    soundhandler.cpp \
+    preferences.cpp
 
 HEADERS  += mainwindow.h \
     ai.h \
@@ -27,7 +30,9 @@ HEADERS  += mainwindow.h \
     gamefield.h \
     resources.h \
     aboutpage.h \
-    userinteractionhandler.h
+    userinteractionhandler.h \
+    soundhandler.h \
+    preferences.h
 
 FORMS    += mainwindow.ui
 
@@ -40,3 +45,4 @@ RESOURCES += \
 
 STATECHARTS += \
     CellStates.scxml
+

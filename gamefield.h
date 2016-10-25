@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include <QScrollArea>
 #include "ai.h"
 #include "headerwrapper.h"
 

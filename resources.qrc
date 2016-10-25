@@ -6,5 +6,17 @@
         <file>icons/Flag.png</file>
         <file>icons/Smile.png</file>
         <file>icons/Frown.png</file>
+        <file>sounds/right_click.ogg</file>
+        <file>sounds/grenade.ogg</file>
+        <file>sounds/Rob_Hubbard_-_Nemesis_The_Warlock_Maf464_remix_.ogg</file>
+        <file>sounds/crash_padle.ogg</file>
+        <file>icons/numerals/4.png</file>
+        <file>icons/numerals/5.png</file>
+        <file>icons/numerals/6.png</file>
+        <file>icons/numerals/7.png</file>
+        <file>icons/numerals/8.png</file>
+        <file>icons/numerals/1.png</file>
+        <file>icons/numerals/2.png</file>
+        <file>icons/numerals/3.png</file>
     </qresource>
 </RCC>

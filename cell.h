@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QLabel>
 #include <QList>
+#include <QHoverEvent>
 #include "headerwrapper.h"
 
 enum Status {
@@ -16,7 +17,6 @@ enum Status {
 struct Coordinate {
     int atRow;
     int atCol;
-
     Coordinate(int row, int col) {
         atRow = row;
         atCol = col;
@@ -46,18 +46,21 @@ public:
     *West;
 
 signals:
+    void hovered();
     void clicked(Cell *, QMouseEvent *);
     void clicked_double(Cell *, QMouseEvent *);
     void wasRevealed(Cell *, QMouseEvent *);
     void statusChanged();
 
 public slots:
-    void refresh();
+    void refreshUI();
 
 
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 
 };
 
