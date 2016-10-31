@@ -14,10 +14,11 @@ class GameField : public QWidget
 public:
     explicit GameField(QWidget *parent = 0);
 
+    QScrollArea *scrollView;
     CellMatrix *cells;
     AI *ai;
     bool hasBeenSetup;
-    QGridLayout *layout;
+    QGridLayout *gridLayout;
 
 //signals:
 

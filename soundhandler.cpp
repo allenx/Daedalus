@@ -1,46 +1,37 @@
 #include "soundhandler.h"
 #include <QDebug>
+#include <QSoundEffect>
+#include <QTimer>
+
 
 SoundHandler::SoundHandler(QObject *parent) :
-    QObject(parent),
-    bgm(new QMediaPlayer),
-    leftClickMusic(new QMediaPlayer),
-    rightClickMusic(new QMediaPlayer),
-    explosionMusic(new QMediaPlayer),
-    winningMusic(new QMediaPlayer),
-    playList(new QMediaPlaylist)
-
+    QObject(parent)
 {
-    bgm->setMedia(QUrl::fromLocalFile(bgmSound));
-    leftClickMusic->setMedia(QUrl::fromLocalFile(leftClickSound));
-    rightClickMusic->setMedia(QUrl::fromLocalFile(rightClickSound));
-    explosionMusic->setMedia(QUrl::fromLocalFile(explosionSound));
-    winningMusic->setMedia(QUrl::fromLocalFile(winningSound));
+    //qsound = QSound(bgmSound);
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(playBGM())); // ***就是你所说的响应函数
+    timer->start(6*60*1000+15*1000);
 
 }
 
-
 void SoundHandler::playBGM() {
-    //if statement
-
-    bgm->play();
-    qDebug("played");
+    QSound::play(bgmSound);
 }
 
 void SoundHandler::playLeftClickMusic() {
-    leftClickMusic->play();
+    QSound::play(leftClickSound);
 }
 
 void SoundHandler::playRightClickMusic() {
-    rightClickMusic->play();
+    QSound::play(rightClickSound);
 }
 
 void SoundHandler::playWinningMusic() {
-
+    QSound::play(explosionSound);
 }
 
 void SoundHandler::playExplosionMusic() {
-
+    QSound::play(explosionSound);
 }
 
 void SoundHandler::pauseMusic() {

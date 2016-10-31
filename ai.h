@@ -7,14 +7,39 @@
 
 
 #include "userinteractionhandler.h"
+#include "preferences.h"
 #include "headerwrapper.h"
 
 //Iterates the 8 pointers of a cell and apply the lambda function to them
 template<typename Lambda>
 void iterateCellsAround(Cell *cell, Lambda &&func) {
-    func(cell->North);
-    func(cell->NorthEast);
-    func(cell->NorthWest);
+    if (cell->North != NULL) {
+        func(cell->North);
+    }
+    if (cell->North != NULL) {
+        func(cell->NorthEast);
+    }
+    if (cell->North != NULL) {
+        func(cell->NorthWest);
+    }
+    if (cell->North != NULL) {
+        
+    }
+    if (cell->North != NULL) {
+        
+    }
+    if (cell->North != NULL) {
+        
+    }
+    if (cell->North != NULL) {
+        
+    }
+    if (cell->North != NULL) {
+        
+    }
+    
+
+    
     func(cell->South);
     func(cell->SouthEast);
     func(cell->SouthWest);
@@ -27,6 +52,13 @@ struct Board {
     int rowCount;
     int colCount;
     int mineCount;
+
+//    Board(Preferences *preferences) {
+//        isAllSet = true;
+//        rowCount = preferences->rowCount;
+//        colCount = preferences->colCount;
+//        mineCount = preferences->mineCount;
+//    }
 };
 
 class AI : public QObject
@@ -38,8 +70,9 @@ public:
     AI();
     Cell ***initCellsFoo(int rowCount, int columnCount);
     //QList<QList<Cell *> *> *initCells(int rowCount, int colCount);
-    CellMatrix *initCells(int rowCount=20, int colCount=20);
+    CellMatrix *initCells(int rowCount=12, int colCount=12);
 
+    //Preferences *preferences;
     CellMatrix *cells;
     FlatList *mines;
     int flaggedCount;
@@ -49,20 +82,24 @@ public:
 
 signals:
     void steppedOnAMine(Cell *);
+    void gameInitialized();
 
 
 private:
     UserInteractionHandler *_interactionHandler;
     SoundHandler *_soundHandler;
-    void bindCellsToHandler(Cell *, UserInteractionHandler *);
-    void bindHandlerToAI(UserInteractionHandler *, AI *);
+    void bindCellsToInteractionHandler(Cell *, UserInteractionHandler *);
+    void bindInteractionHandlerToAI(UserInteractionHandler *, AI *);
+    void bindInteractionhandlerToSoundHandler(UserInteractionHandler *, SoundHandler *);
+    void bindAIToSoundHandler(AI *, SoundHandler *);
 
 public slots:
     void rightClickACell(Cell *);
     void revealCell(Cell *);
     void pause();
     void resume();
-
+    void receivedNewPreferences(Preferences *);
+    void restart();
 };
 
 #endif // AI_H

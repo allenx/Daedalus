@@ -8,6 +8,7 @@
 #define cellPic ":/icons/Cell.png"
 #define explosionPic ":/icons/Explosion.png"
 #define flagPic ":/icons/Flag.png"
+#define questionMarkPic ":/icons/questionMark.png"
 #define frownPic ":/icons/Frown.png"
 #define smilePic "/icons/Smile.png"
 
@@ -24,11 +25,11 @@
 
 
 //Sounds
-#define bgmSound ":/sounds/Rob_Hubbard_-_Nemesis_The_Warlock_Maf464_remix_.ogg"
-#define leftClickSound ":/sounds/crash_padle.ogg"
-#define rightClickSound ":/sounds/right_click.ogg"
-#define explosionSound ":/sounds/grenade.ogg"
-#define winningSound ":/sounds/grenade.ogg"
+#define bgmSound ":/sounds/Rob_Hubbard_-_Nemesis_The_Warlock_Maf464_remix_.wav"
+#define leftClickSound ":/sounds/crash_padle.wav"
+#define rightClickSound ":/sounds/right_click.wav"
+#define explosionSound ":/sounds/grenade.wav"
+#define winningSound ":/sounds/grenade.wav"
 
 //struct Resource {
 //    static const QString bombPic = ":/icons/Bomb.png";

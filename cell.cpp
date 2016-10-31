@@ -63,7 +63,7 @@ void Cell::refreshUI() {
         setPixmap(QPixmap(flagPic).scaled(this->width(), this->height(), Qt::KeepAspectRatio));
         break;
     case questioned:
-        setPixmap(QPixmap(flagPic).scaled(this->width(), this->height(), Qt::KeepAspectRatio));
+        setPixmap(QPixmap(questionMarkPic).scaled(this->width(), this->height(), Qt::KeepAspectRatio));
         break;
     case revealed:
     {
@@ -73,6 +73,7 @@ void Cell::refreshUI() {
             break;
         case 0:
             //fuck with it
+            clear();
             break;
         case 1:
             setPixmap(QPixmap(one).scaled(this->width(), this->height(), Qt::KeepAspectRatio));
@@ -105,4 +106,24 @@ void Cell::refreshUI() {
     default:
         break;
     }
+}
+
+
+//Iterate Pointers Around a Cell and save'em into a list
+FlatList *Cell::cellsAround() {
+
+    FlatList *foo = new FlatList;
+    if (-2 == content) {
+        qDebug("Cells are not initialized yet");
+        return NULL;
+    }
+    if (North->content != -2) foo->append(North);
+    if (NorthWest->content != -2) foo->append(NorthWest);
+    if (NorthEast->content != -2) foo->append(NorthEast);
+    if (South->content != -2) foo->append(South);
+    if (SouthWest->content != -2) foo->append(SouthWest);
+    if (SouthEast->content != -2) foo->append(SouthEast);
+    if (West->content != -2) foo->append(West);
+    if (East->content != -2) foo->append(East);
+    return foo;
 }

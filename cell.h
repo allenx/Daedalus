@@ -35,6 +35,7 @@ public:
     Status status;
     void setStatus(Status);
     Cell(int atRow, int atCol);
+    FlatList *cellsAround();
 
     Cell *NorthWest,
     *North,

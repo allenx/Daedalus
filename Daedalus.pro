@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     aboutpage.cpp \
     userinteractionhandler.cpp \
     soundhandler.cpp \
-    preferences.cpp
+    preferences.cpp \
+    timer.cpp \
+    winningdialog.cpp
 
 HEADERS  += mainwindow.h \
     ai.h \
@@ -32,7 +34,9 @@ HEADERS  += mainwindow.h \
     aboutpage.h \
     userinteractionhandler.h \
     soundhandler.h \
-    preferences.h
+    preferences.h \
+    timer.h \
+    winningdialog.h
 
 FORMS    += mainwindow.ui
 
@@ -45,4 +49,5 @@ RESOURCES += \
 
 STATECHARTS += \
     CellStates.scxml
+
 

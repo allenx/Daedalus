@@ -34,11 +34,16 @@ private:
     QAction *preferencesAct;
     QAction *aboutAct;
 
+signals:
+    void gameInitialized();
+    void restart();
+
 public slots:
     void openAboutPage();
     void openPreferencesPage();
-    void newGame();
-    void restart();
+    void sendNewGameSignal();
+//    void newGame();
+//    void restart();
 
 protected:
 //    void contextMenuEvent(QContextMenuEvent *event);
