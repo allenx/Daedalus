@@ -10,7 +10,10 @@
 #define flagPic ":/icons/Flag.png"
 #define questionMarkPic ":/icons/questionMark.png"
 #define frownPic ":/icons/Frown.png"
-#define smilePic "/icons/Smile.png"
+#define smilePic ":/icons/Smile.png"
+#define logoPic ":/icons/LOGO.png"
+#define brandingPic ":icons/Branding.png"
+#define aboutPagePic ":/icons/About.png"
 
 
 //Numerals
@@ -37,7 +40,7 @@
 //    static const QString explosionPic = ":/icons/Explosion.png";
 //    static const QString flagPic = ":/icons/Flag.png";
 //    static const QString frownPic = ":/icons/Frown.png";
-//    static const QString smilePic = "/icons/Smile.png";
+//    static const QString smilePic = ":/icons/Smile.png";
 //};
 
 //enum Resource {

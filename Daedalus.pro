@@ -22,7 +22,6 @@ SOURCES += main.cpp\
     userinteractionhandler.cpp \
     soundhandler.cpp \
     preferences.cpp \
-    timer.cpp \
     winningdialog.cpp \
     defeateddialog.cpp \
     stopwatch.cpp
@@ -37,7 +36,6 @@ HEADERS  += mainwindow.h \
     userinteractionhandler.h \
     soundhandler.h \
     preferences.h \
-    timer.h \
     winningdialog.h \
     defeateddialog.h \
     stopwatch.h

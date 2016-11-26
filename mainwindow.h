@@ -33,7 +33,6 @@ private:
     QAction *aboutAct;
 
 signals:
-    void gameInitialized();
     void newWindowPopped();
     void restart();
 

@@ -27,7 +27,6 @@ GameField::GameField(QWidget *parent) :
     scrollView->setWidget(client);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(new QLabel("Something else", this));
     layout->addWidget(scrollView);
     //setFixedSize(800, 800);
     //setSizePolicy();

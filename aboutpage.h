@@ -2,6 +2,7 @@
 #define ABOUTPAGE_H
 
 #include <QWidget>
+#include "headerwrapper.h"
 
 class AboutPage : public QWidget
 {

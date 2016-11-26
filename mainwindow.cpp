@@ -53,15 +53,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     GameField *field = new GameField;
     StopWatch *stopWatch = new StopWatch;
+
     connect(this, SIGNAL(restart()), &AI::sharedInstance(), SLOT(restart()));
     QVBoxLayout *vLayout = new QVBoxLayout;
-    QPushButton *btn = new QPushButton("GO");
     //QPushButton *btn1 = new QPushButton(QIcon(smilePic));
     QHBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->addWidget(btn);
-
-
+    QLabel *placeHolder1 = new QLabel;
+    QLabel *placeHolder2 = new QLabel;
+    hLayout->addWidget(placeHolder1);
+    hLayout->addWidget(stopWatch);
+    hLayout->addWidget(placeHolder2);
     vLayout->addLayout(hLayout);
+//    vLayout->addWidget(stopWatch);
     vLayout->addWidget(field);
     this->centralWidget()->setLayout(vLayout);
 }

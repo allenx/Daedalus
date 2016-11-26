@@ -193,6 +193,7 @@ void AI::revealCell(Cell *cell) {
 
     if (-2 == cell->content) {
         layMines(cell);
+        emit gameStarted();
     }
 
     if (cell->status == revealed && cell->content != 0) {
