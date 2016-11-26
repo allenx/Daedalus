@@ -17,6 +17,8 @@ AI::AI() :
         board.rowCount = 12;
         board.colCount = 12;
         board.mineCount = 40;
+        board.normalCellCount = board.rowCount * board.colCount - board.mineCount;
+        board.numberOfCellsRevealed = 0;
         board.isAllSet = true;
         cells = initCells();
     }
@@ -106,6 +108,7 @@ void AI::layMines(Cell *cell) {
         int randomCol = (qrand() % maxCol) + 1;
         if ((randomRow != cell->coordinate.atRow) && (randomCol != cell->coordinate.atCol) && (cells->at(randomRow)->at(randomCol)->isMine != true)) {
             cells->at(randomRow)->at(randomCol)->isMine = true;
+            mines->append(cells->at(randomRow)->at(randomCol));
             foo -= 1;
         }
     }
@@ -169,14 +172,14 @@ void AI::countNeighbourMines(CellMatrix *cells) {
                 foo->content += 1;
             }
 
-//            if (foo->cellsAround() != NULL) {
-//                FlatList *fooList = foo->cellsAround();
-//                for (int i=0; i<fooList->count(); ++i) {
-//                    if (fooList->at(i)->isMine) {
-//                        foo->content += 1;
-//                    }
-//                }
-//            }
+            //            if (foo->cellsAround() != NULL) {
+            //                FlatList *fooList = foo->cellsAround();
+            //                for (int i=0; i<fooList->count(); ++i) {
+            //                    if (fooList->at(i)->isMine) {
+            //                        foo->content += 1;
+            //                    }
+            //                }
+            //            }
 
         }
     }
@@ -184,7 +187,10 @@ void AI::countNeighbourMines(CellMatrix *cells) {
 
 
 void AI::revealCell(Cell *cell) {
+
+    //foo here represents the number of flagged cells around the clicked cell
     int foo = 0;
+
     if (-2 == cell->content) {
         layMines(cell);
     }
@@ -193,53 +199,53 @@ void AI::revealCell(Cell *cell) {
 
         FlatList *fooListToReveal = new FlatList;
 
-//        if (cell->North->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->North);
-//        }
+        //        if (cell->North->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->North);
+        //        }
 
-//        if (cell->NorthEast->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->NorthEast);
-//        }
+        //        if (cell->NorthEast->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->NorthEast);
+        //        }
 
-//        if (cell->East->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->East);
-//        }
+        //        if (cell->East->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->East);
+        //        }
 
-//        if (cell->SouthEast->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->SouthEast);
-//        }
+        //        if (cell->SouthEast->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->SouthEast);
+        //        }
 
-//        if (cell->South->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->South);
-//        }
+        //        if (cell->South->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->South);
+        //        }
 
-//        if (cell->SouthWest->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->SouthWest);
-//        }
+        //        if (cell->SouthWest->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->SouthWest);
+        //        }
 
-//        if (cell->West->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->West);
-//        }
+        //        if (cell->West->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->West);
+        //        }
 
-//        if (cell->NorthWest->status == flagged) {
-//            ++foo;
-//        } else {
-//            fooListToReveal->append(cell->NorthWest);
-//        }
+        //        if (cell->NorthWest->status == flagged) {
+        //            ++foo;
+        //        } else {
+        //            fooListToReveal->append(cell->NorthWest);
+        //        }
 
         if (cell->cellsAround() != NULL) {
             FlatList *fooList = cell->cellsAround();
@@ -261,11 +267,14 @@ void AI::revealCell(Cell *cell) {
             }
         }
 
+        //judge the game to see if the user has won
+        this->judge();
+
     } else {
         cell->setStatus(revealed);
+        board.numberOfCellsRevealed += 1;
 
         switch (cell->content) {
-
         case -1: {
             for (int i=0; i<mines->count(); ++i) {
                 if (cell != mines->at(i)) {
@@ -280,53 +289,53 @@ void AI::revealCell(Cell *cell) {
 
             FlatList *fooListToReveal = new FlatList;
 
-//            if (cell->North->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->North);
-//            }
+            //            if (cell->North->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->North);
+            //            }
 
-//            if (cell->NorthEast->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->NorthEast);
-//            }
+            //            if (cell->NorthEast->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->NorthEast);
+            //            }
 
-//            if (cell->East->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->East);
-//            }
+            //            if (cell->East->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->East);
+            //            }
 
-//            if (cell->SouthEast->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->SouthEast);
-//            }
+            //            if (cell->SouthEast->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->SouthEast);
+            //            }
 
-//            if (cell->South->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->South);
-//            }
+            //            if (cell->South->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->South);
+            //            }
 
-//            if (cell->SouthWest->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->SouthWest);
-//            }
+            //            if (cell->SouthWest->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->SouthWest);
+            //            }
 
-//            if (cell->West->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->West);
-//            }
+            //            if (cell->West->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->West);
+            //            }
 
-//            if (cell->NorthWest->status == flagged) {
-//                ++foo;
-//            } else {
-//                fooListToReveal->append(cell->NorthWest);
-//            }
+            //            if (cell->NorthWest->status == flagged) {
+            //                ++foo;
+            //            } else {
+            //                fooListToReveal->append(cell->NorthWest);
+            //            }
 
             if (cell->cellsAround() != NULL) {
                 FlatList *fooList = cell->cellsAround();
@@ -354,30 +363,35 @@ void AI::revealCell(Cell *cell) {
         }
         }
 
+        this->judge();
     }
 }
 
 
 void AI::rightClickACell(Cell *cell) {
     switch (cell->status) {
-    case virgin:
+    case virgin: {
         cell->setStatus(flagged);
         break;
-    case flagged:
+    }
+    case flagged: {
         cell->setStatus(questioned);
         break;
-    case questioned:
+    }
+    case questioned: {
         cell->setStatus(virgin);
         break;
-    default:
-        break;
+    }
+    default: break;
     }
 }
 
 
 void AI::bindCellsToInteractionHandler(Cell *cell, UserInteractionHandler *interactionHandler) {
+    //whenever the status of a cell changes, the UI of the cell should change corespondingly
     QObject::connect(cell, SIGNAL(statusChanged()), cell, SLOT(refreshUI()));
 
+    //UserInteractionHandler filters User Activities and make them more easy for the AI to make changes
     QObject::connect(cell, SIGNAL(clicked(Cell*,QMouseEvent*)), interactionHandler, SLOT(interactionReceived(Cell*,QMouseEvent*)));
     QObject::connect(cell, SIGNAL(clicked_double(Cell*,QMouseEvent*)), interactionHandler, SLOT(interactionReceived_DoubleClick(Cell*,QMouseEvent*)));
 
@@ -386,6 +400,8 @@ void AI::bindCellsToInteractionHandler(Cell *cell, UserInteractionHandler *inter
 
 
 void AI::bindInteractionHandlerToAI(UserInteractionHandler *interactionHandler, AI *ai) {
+    //these signals of emitted by the UserInteractionHandler is the result of the handler's filtering user's activities
+    //and these signals are easier for the AI to understand
     QObject::connect(interactionHandler, SIGNAL(clicked_left(Cell*)), ai, SLOT(revealCell(Cell*)));
     QObject::connect(interactionHandler, SIGNAL(clicked_right(Cell*)), ai, SLOT(rightClickACell(Cell*)));
     QObject::connect(interactionHandler, SIGNAL(clicked_double(Cell*)), ai, SLOT(revealCell(Cell*)));
@@ -393,14 +409,25 @@ void AI::bindInteractionHandlerToAI(UserInteractionHandler *interactionHandler, 
 }
 
 void AI::bindInteractionhandlerToSoundHandler(UserInteractionHandler *interactionHandler, SoundHandler *soundHandler) {
+    //whenever a cell gets clicked_left or clicked_right, the game should make a sound to imply that the user has succeeded in doing so
     QObject::connect(interactionHandler, SIGNAL(clicked_left(Cell*)), soundHandler, SLOT(playLeftClickMusic()));
     QObject::connect(interactionHandler, SIGNAL(clicked_double(Cell*)), soundHandler, SLOT(playLeftClickMusic()));
     QObject::connect(interactionHandler, SIGNAL(clicked_right(Cell*)), soundHandler, SLOT(playRightClickMusic()));
 }
 
 void AI::bindAIToSoundHandler(AI *ai, SoundHandler *soundHandler) {
-    QObject::connect(ai, SIGNAL(steppedOnAMine(Cell*)), soundHandler, SLOT(playExplosionMusic()));
+    //as soon as the game has been initialized, our AI should emit a signal to let the SoundHandler know that the game is on
+    //and it should bring some music on
     QObject::connect(ai, SIGNAL(gameInitialized()), soundHandler, SLOT(playBGM()));
+    QObject::connect(ai, SIGNAL(steppedOnAMine(Cell*)), soundHandler, SLOT(playExplosionMusic()));
+
+}
+
+
+void AI::judge() {
+    if (board.numberOfCellsRevealed == board.normalCellCount) {
+
+    }
 }
 
 

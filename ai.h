@@ -52,7 +52,10 @@ struct Board {
     int rowCount;
     int colCount;
     int mineCount;
+    int normalCellCount;
 
+    int virginCellsLeft;
+    int numberOfCellsRevealed;
 //    Board(Preferences *preferences) {
 //        isAllSet = true;
 //        rowCount = preferences->rowCount;
@@ -79,10 +82,13 @@ public:
     Board board;
     void layMines(Cell *);
     void countNeighbourMines(CellMatrix *cells);
+    void judge();
 
 signals:
     void steppedOnAMine(Cell *);
     void gameInitialized();
+    void succeeded();
+    void failed();
 
 
 private:
