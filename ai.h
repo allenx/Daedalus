@@ -70,6 +70,11 @@ class AI : public QObject
     Q_OBJECT
 
 public:
+
+    static AI &sharedInstance() {
+        static AI instance;
+        return instance;
+    }
     AI();
     Cell ***initCellsFoo(int rowCount, int columnCount);
     //QList<QList<Cell *> *> *initCells(int rowCount, int colCount);
@@ -102,6 +107,7 @@ private:
 public slots:
     void rightClickACell(Cell *);
     void revealCell(Cell *);
+
     void pause();
     void resume();
     void receivedNewPreferences(Preferences *);

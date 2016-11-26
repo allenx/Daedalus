@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     soundhandler.cpp \
     preferences.cpp \
     timer.cpp \
-    winningdialog.cpp
+    winningdialog.cpp \
+    defeateddialog.cpp \
+    stopwatch.cpp
 
 HEADERS  += mainwindow.h \
     ai.h \
@@ -36,7 +38,9 @@ HEADERS  += mainwindow.h \
     soundhandler.h \
     preferences.h \
     timer.h \
-    winningdialog.h
+    winningdialog.h \
+    defeateddialog.h \
+    stopwatch.h
 
 FORMS    += mainwindow.ui
 

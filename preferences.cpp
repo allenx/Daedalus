@@ -22,6 +22,7 @@ Preferences::Preferences() :
 
     //rowSlider->setStyleSheet("background-color: white");
 
+
     QObject::connect(rowSlider, SIGNAL(valueChanged(int)), rowSpinBox, SLOT(setValue(int)));
     QObject::connect(colSlider, SIGNAL(valueChanged(int)), colSpinBox, SLOT(setValue(int)));
     QObject::connect(rowSpinBox, SIGNAL(valueChanged(int)), rowSlider, SLOT(setValue(int)));

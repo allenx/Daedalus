@@ -6,6 +6,11 @@
 #include <QHBoxLayout>
 #include <QIcon>
 #include "ai.h"
+#include "winningdialog.h"
+#include "defeateddialog.h"
+#include "aboutpage.h"
+#include "preferences.h"
+#include "stopwatch.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(preferencesAct, SIGNAL(triggered(bool)), this, SLOT(openPreferencesPage()));
     connect(aboutAct, SIGNAL(triggered(bool)), this, SLOT(openAboutPage()));
 
+    //QObject::connect(this, SIGNAL(newWindowPopped()),
 
     //group alignment so that they are mutual exclusive
     QList<QAction *> gameOptionsMenuActionsGroup = QList<QAction *>();
@@ -46,7 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
     createMenuWithNameAndActions("More", moreOptionsMenuActionsGroup);
 
     GameField *field = new GameField;
-    connect(this, SIGNAL(restart()), field->ai, SLOT(restart()));
+    StopWatch *stopWatch = new StopWatch;
+    connect(this, SIGNAL(restart()), &AI::sharedInstance(), SLOT(restart()));
     QVBoxLayout *vLayout = new QVBoxLayout;
     QPushButton *btn = new QPushButton("GO");
     //QPushButton *btn1 = new QPushButton(QIcon(smilePic));
@@ -87,11 +94,25 @@ void MainWindow::createMenuWithNameAndActions(const char *str, QList<QAction *> 
 void MainWindow::openAboutPage() {
     AboutPage *foo = new AboutPage;
     foo->show();
+    emit newWindowPopped();
 }
 
 void MainWindow::openPreferencesPage() {
     Preferences *foo = new Preferences;
     foo->show();
+    emit newWindowPopped();
+}
+
+void MainWindow::showWinningResults() {
+    WinningDialog *foo = new WinningDialog();
+    foo->show();
+    emit newWindowPopped();
+}
+
+void MainWindow::showFailure() {
+    DefeatedDialog *foo = new DefeatedDialog();
+    foo->show();
+    emit newWindowPopped();
 }
 
 //void MainWindow::newGame() {

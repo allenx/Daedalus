@@ -4,8 +4,6 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QMenu>
-#include "aboutpage.h"
-#include "preferences.h"
 #include "headerwrapper.h"
 
 namespace Ui {
@@ -36,12 +34,15 @@ private:
 
 signals:
     void gameInitialized();
+    void newWindowPopped();
     void restart();
 
 public slots:
     void openAboutPage();
     void openPreferencesPage();
     void sendNewGameSignal();
+    void showWinningResults();
+    void showFailure();
 //    void newGame();
 //    void restart();
 

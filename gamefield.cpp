@@ -4,12 +4,13 @@
 
 GameField::GameField(QWidget *parent) :
     QWidget(parent),
-    ai(new AI),
+    //ai(new AI),
     hasBeenSetup(false),
     gridLayout(new QGridLayout)
 
 {
-    CellMatrix *cells = ai->cells;
+    CellMatrix *cells = AI::sharedInstance().cells;
+    //CellMatrix *cells = ai->cells;
 
     for (int i=1; i<cells->count()-1; ++i) {
         for (int j=1; j<cells->at(i)->count()-1; ++j) {

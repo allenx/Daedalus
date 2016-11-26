@@ -16,7 +16,6 @@ public:
 
     QScrollArea *scrollView;
     CellMatrix *cells;
-    AI *ai;
     bool hasBeenSetup;
     QGridLayout *gridLayout;
 
