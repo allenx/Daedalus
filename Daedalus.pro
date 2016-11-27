@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     preferences.cpp \
     winningdialog.cpp \
     defeateddialog.cpp \
-    stopwatch.cpp
+    stopwatch.cpp \
+    adobeocrlabel.cpp
 
 HEADERS  += mainwindow.h \
     ai.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     preferences.h \
     winningdialog.h \
     defeateddialog.h \
-    stopwatch.h
+    stopwatch.h \
+    adobeocrlabel.h
 
 FORMS    += mainwindow.ui
 

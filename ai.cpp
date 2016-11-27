@@ -5,8 +5,8 @@
 AI::AI() :
     mines(new FlatList),
     flaggedCount(0),
-    _interactionHandler(new UserInteractionHandler(this)),
     board(Board()),
+    _interactionHandler(new UserInteractionHandler(this)),
     _soundHandler(new SoundHandler(this))
 
 {
@@ -26,6 +26,9 @@ AI::AI() :
     bindInteractionHandlerToAI(_interactionHandler, this);
     bindInteractionhandlerToSoundHandler(_interactionHandler, _soundHandler);
     bindAIToSoundHandler(this, _soundHandler);
+
+    QObject::connect(this, SIGNAL(newWindowPopped()), this, SLOT(pause()));
+    QObject::connect(this, SIGNAL(topViewDismissed()), this, SLOT(resume()));
 
     emit gameInitialized();
 }
@@ -283,6 +286,7 @@ void AI::revealCell(Cell *cell) {
                 }
             }
             emit steppedOnAMine(cell);
+            qDebug("stepped on a mine!");
             break;
         }
 
@@ -369,6 +373,19 @@ void AI::revealCell(Cell *cell) {
 }
 
 
+void AI::leftClickACell(Cell *cell) {
+    switch (cell->status) {
+    case virgin:
+        revealCell(cell);
+        break;
+    case revealed:
+        revealCell(cell);
+    //If the cell is flagged or questioned, it cannot be revealed unless it's back to virgin
+    default:
+        break;
+    }
+}
+
 void AI::rightClickACell(Cell *cell) {
     switch (cell->status) {
     case virgin: {
@@ -403,9 +420,9 @@ void AI::bindCellsToInteractionHandler(Cell *cell, UserInteractionHandler *inter
 void AI::bindInteractionHandlerToAI(UserInteractionHandler *interactionHandler, AI *ai) {
     //these signals of emitted by the UserInteractionHandler is the result of the handler's filtering user's activities
     //and these signals are easier for the AI to understand
-    QObject::connect(interactionHandler, SIGNAL(clicked_left(Cell*)), ai, SLOT(revealCell(Cell*)));
+    QObject::connect(interactionHandler, SIGNAL(clicked_left(Cell*)), ai, SLOT(leftClickACell(Cell*)));
     QObject::connect(interactionHandler, SIGNAL(clicked_right(Cell*)), ai, SLOT(rightClickACell(Cell*)));
-    QObject::connect(interactionHandler, SIGNAL(clicked_double(Cell*)), ai, SLOT(revealCell(Cell*)));
+    QObject::connect(interactionHandler, SIGNAL(clicked_double(Cell*)), ai, SLOT(leftClickACell(Cell*)));
 
 }
 
@@ -428,34 +445,67 @@ void AI::bindAIToSoundHandler(AI *ai, SoundHandler *soundHandler) {
 void AI::judge() {
     if (board.numberOfCellsRevealed == board.normalCellCount) {
 
+        emit waitingForTheTime();
     }
 }
 
 
 void AI::pause() {
+    //Disconnect InteractionHandler and SoundHandler
+    QObject::disconnect(_interactionHandler, SIGNAL(clicked_left(Cell*)), _soundHandler, SLOT(playLeftClickMusic()));
+    QObject::disconnect(_interactionHandler, SIGNAL(clicked_double(Cell*)), _soundHandler, SLOT(playLeftClickMusic()));
+    QObject::disconnect(_interactionHandler, SIGNAL(clicked_right(Cell*)), _soundHandler, SLOT(playRightClickMusic()));
 
+    //Disconnect InteractionHandler and AI
+    QObject::disconnect(_interactionHandler, SIGNAL(clicked_left(Cell*)), this, SLOT(leftClickACell(Cell*)));
+    QObject::disconnect(_interactionHandler, SIGNAL(clicked_right(Cell*)), this, SLOT(rightClickACell(Cell*)));
+    QObject::disconnect(_interactionHandler, SIGNAL(clicked_double(Cell*)), this, SLOT(leftClickACell(Cell*)));
+
+    //Disconnect SoundHandler and AI
+    QObject::disconnect(this, SIGNAL(steppedOnAMine(Cell*)), _soundHandler, SLOT(playExplosionMusic()));
 }
 
 
 void AI::resume() {
-
-}
-
-
-void AI::restart() {
-    QObject *obj = QObject::sender();
-    if (obj->inherits("Preferences")) {
-        Preferences *preferences = qobject_cast<Preferences *>(sender());
-        board.rowCount = preferences->rowCount;
-        board.colCount = preferences->colCount;
-        board.mineCount = preferences->mineCount;
-        cells = initCells(board.rowCount, board.colCount);
-    } else {
-        cells = initCells(board.rowCount, board.colCount);
-    }
+    bindInteractionhandlerToSoundHandler(_interactionHandler, _soundHandler);
+    bindInteractionHandlerToAI(_interactionHandler, this);
+    QObject::connect(this, SIGNAL(steppedOnAMine(Cell*)), _soundHandler, SLOT(playExplosionMusic()));
 }
 
 
 void AI::receivedNewPreferences(Preferences *preferences) {
+    board.rowCount = preferences->rowCount;
+    board.colCount = preferences->colCount;
+    board.mineCount = preferences->mineCount;
+    board.normalCellCount = board.rowCount * board.colCount - board.mineCount;
+    board.numberOfCellsRevealed = 0;
+    board.isAllSet = true;
+//    qDebug("fuckit");
+    if (board.isAllSet) {
+        cells = initCells(board.rowCount, board.colCount);
+    } else {
+        board.rowCount = 12;
+        board.colCount = 12;
+        board.mineCount = 40;
+        board.normalCellCount = board.rowCount * board.colCount - board.mineCount;
+        board.numberOfCellsRevealed = 0;
+        board.isAllSet = true;
+        cells = initCells();
+    }
 
+    bindInteractionHandlerToAI(_interactionHandler, this);
+    bindInteractionhandlerToSoundHandler(_interactionHandler, _soundHandler);
+    bindAIToSoundHandler(this, _soundHandler);
+
+    emit reloadGame();
+}
+
+void AI::userClickedRestart() {
+    cells = this->initCells(this->board.rowCount, this->board.colCount);
+    emit reloadGame();
+}
+
+void AI::receivedTime(QString time) {
+    this->time = time;
+    emit succeeded();
 }

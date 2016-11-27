@@ -2,6 +2,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
+#include "ai.h"
+#include <QDebug>
 
 Preferences::Preferences() :
     rowCount(0),
@@ -27,6 +29,18 @@ Preferences::Preferences() :
     QObject::connect(colSlider, SIGNAL(valueChanged(int)), colSpinBox, SLOT(setValue(int)));
     QObject::connect(rowSpinBox, SIGNAL(valueChanged(int)), rowSlider, SLOT(setValue(int)));
     QObject::connect(colSpinBox, SIGNAL(valueChanged(int)), colSlider, SLOT(setValue(int)));
+    QObject::connect(mineSlider, SIGNAL(valueChanged(int)), mineSpinBox, SLOT(setValue(int)));
+    QObject::connect(mineSpinBox, SIGNAL(valueChanged(int)), mineSlider, SLOT(setValue(int)));
+
+    QObject::connect(rowSlider, SIGNAL(valueChanged(int)), this, SLOT(refresh()));
+    QObject::connect(colSlider, SIGNAL(valueChanged(int)), this, SLOT(refresh()));
+    QObject::connect(rowSpinBox, SIGNAL(valueChanged(int)), this, SLOT(refresh()));
+    QObject::connect(colSpinBox, SIGNAL(valueChanged(int)), this, SLOT(refresh()));
+    QObject::connect(mineSlider, SIGNAL(valueChanged(int)), this, SLOT(refresh()));
+    QObject::connect(mineSpinBox, SIGNAL(valueChanged(int)), this, SLOT(refresh()));
+
+    QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     QHBoxLayout *hLayout0 = new QHBoxLayout;
     hLayout0->addWidget(new QLabel("ROWS:"));
@@ -51,7 +65,34 @@ Preferences::Preferences() :
 
     //setStyleSheet("background-color: black");
     setLayout(vLayout);
+
+    QObject::connect(this, SIGNAL(accepted(Preferences*)), &AI::sharedInstance(), SLOT(receivedNewPreferences(Preferences*)));
+    QObject::connect(this, SIGNAL(rejected()), &AI::sharedInstance(), SLOT(resume()));
+    QObject::connect(this, SIGNAL(dismissed()), &AI::sharedInstance(), SIGNAL(topViewDismissed()));
+
 }
 
 
+void Preferences::accept() {
+    if ((rowCount > 0 || colCount > 0) && mineCount > 0) {
+        this->done(1);
+        connect(this, SIGNAL(accepted()), this, SIGNAL(dismissed()));
+        emit accepted(this);
+    } else {
+        qDebug("nullll");
+    }
+}
+
+void Preferences::reject() {
+    this->done(0);
+    connect(this, SIGNAL(rejected()), this, SIGNAL(dismissed()));
+    emit rejected();
+}
+
+void Preferences::refresh() {
+    rowCount = rowSlider->value();
+    qDebug("rowCount: %i", rowCount);
+    colCount = colSlider->value();
+    mineCount = mineSlider->value();
+}
 

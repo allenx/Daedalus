@@ -12,12 +12,19 @@ class Preferences : public QDialog
 
 signals:
     void accepted(Preferences *);
+    void rejected();
+    void dismissed();
 
 public:
     explicit Preferences();
     int rowCount;
     int colCount;
     int mineCount;
+
+public slots:
+    void accept();
+    void reject();
+    void refresh();
 
 protected:
     QSlider *rowSlider;

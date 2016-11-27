@@ -31,13 +31,14 @@ void SoundHandler::playWinningMusic() {
 }
 
 void SoundHandler::playExplosionMusic() {
+
     QSound::play(explosionSound);
 }
 
 void SoundHandler::pauseMusic() {
-
+    //QSound::stop();
 }
 
 void SoundHandler::resumeMusic() {
-
+    playBGM();
 }

@@ -4,14 +4,14 @@
 #include "ai.h"
 #include <QFont>
 #include <QPalette>
-
+#include "headerwrapper.h"
 
 StopWatch::StopWatch(QWidget *parent) :
     QWidget(parent),
     mRunning(false),
     mStartTime(),
     //mLabel(new QLabel("0:0:0:0"))
-    mLabel(new QLabel("0:0:0"))
+    mLabel(new ADOBEOCRLabel(QColor(0, 228, 255, 255), QColor(0, 0, 0, 255), "0:0:0"))
 {
     QHBoxLayout *hBoxLayout = new QHBoxLayout(this);
     //    QPushButton *startButton = new QPushButton("Start");
@@ -19,38 +19,14 @@ StopWatch::StopWatch(QWidget *parent) :
 
     //    hBoxLayout->addWidget(startButton);
     //    hBoxLayout->addWidget(stopButton);
-    QFont font;
-    font.setFamily("OCR A STD");
-    //font.setItalic(true);
-    font.setPointSize(32);
-    font.setBold(true);
-
-    QPalette palette;
-
-    //white text
-    QBrush brush(QColor(255, 255, 255, 255));
-    brush.setStyle(Qt::SolidPattern);
-
-    //black background
-    QBrush brush1(QColor(0, 0, 0, 255));
-    brush1.setStyle(Qt::SolidPattern);
-
-    //set white text
-    palette.setBrush(QPalette::Active, QPalette::WindowText, brush);
-    palette.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-
-    //set black background
-    palette.setBrush(QPalette::Active, QPalette::Window, brush1);
-    palette.setBrush(QPalette::Inactive, QPalette::Window, brush1);
-
-    //set palette
-    mLabel->setPalette(palette);
-
-    mLabel->setFont(font);
 
     hBoxLayout->addWidget(mLabel);
-
-    QObject::connect(&AI::sharedInstance(), SIGNAL(gameStarted()), SLOT(start()));
+    QObject::connect(&AI::sharedInstance(), SIGNAL(gameStarted()), this, SLOT(start()));
+    QObject::connect(&AI::sharedInstance(), SIGNAL(steppedOnAMine(Cell*)), this, SLOT(stop()));
+    QObject::connect(&AI::sharedInstance(), SIGNAL(waitingForTheTime()), this, SLOT(stop()));
+    QObject::connect(&AI::sharedInstance(), SIGNAL(newWindowPopped()), this, SLOT(pause()));
+    QObject::connect(&AI::sharedInstance(), SIGNAL(topViewDismissed()), this, SLOT(resume()));
+    QObject::connect(this, SIGNAL(watchStopped(QString)), &AI::sharedInstance(), SLOT(receivedTime(QString)));
     //connect(stopButton, SIGNAL(clicked()), SLOT(stop()));
 
     startTimer(0);
@@ -63,10 +39,24 @@ void StopWatch::start(void) {
 }
 
 
-void StopWatch::stop(void) {
+void StopWatch::stop() {
+    mRunning = false;
+    disconnect(&AI::sharedInstance(), SIGNAL(steppedOnAMine(Cell*)), this, SLOT(stop()));
+    disconnect(&AI::sharedInstance(), SIGNAL(waitingForTheTime()), this, SLOT(stop()));
+    emit watchStopped(this->mLabel->text());
+}
+
+void StopWatch::pause() {
+    //This does not stop timing because the timerEvent is still running in the background.
+    //It just stops refreshing the UI
+    //[FIXME]: to really stop the timing
     mRunning = false;
 }
 
+void StopWatch::resume() {
+    //[FIXME]: to really resume
+    mRunning = true;
+}
 
 void StopWatch::timerEvent(QTimerEvent *) {
     if(mRunning)
@@ -79,6 +69,5 @@ void StopWatch::timerEvent(QTimerEvent *) {
         //QString diff = QString("%1:%2:%3:%4").arg(h).arg(m).arg(s).arg(ms);
         QString diff = QString("%1:%2:%3").arg(h).arg(m).arg(s);
         mLabel->setText(diff);
-
     }
 }

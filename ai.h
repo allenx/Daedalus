@@ -38,7 +38,6 @@ void iterateCellsAround(Cell *cell, Lambda &&func) {
         
     }
     
-
     
     func(cell->South);
     func(cell->SouthEast);
@@ -84,18 +83,22 @@ public:
     CellMatrix *cells;
     FlatList *mines;
     int flaggedCount;
+    QString time;
     Board board;
     void layMines(Cell *);
     void countNeighbourMines(CellMatrix *cells);
     void judge();
+    void revealCell(Cell *);
 
 signals:
     void steppedOnAMine(Cell *);
     void gameInitialized();
     void gameStarted();
+    void waitingForTheTime();
     void succeeded();
-    void failed();
-
+    void reloadGame();
+    void newWindowPopped();
+    void topViewDismissed();
 
 private:
     UserInteractionHandler *_interactionHandler;
@@ -106,13 +109,13 @@ private:
     void bindAIToSoundHandler(AI *, SoundHandler *);
 
 public slots:
+    void leftClickACell(Cell *);
     void rightClickACell(Cell *);
-    void revealCell(Cell *);
-
     void pause();
     void resume();
     void receivedNewPreferences(Preferences *);
-    void restart();
+    void userClickedRestart();
+    void receivedTime(QString);
 };
 
 #endif // AI_H

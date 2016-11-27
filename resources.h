@@ -2,6 +2,12 @@
 #define RESOURCES_H
 //#include <QString>
 //#include <QMap>
+#include <QColor>
+
+//Colours
+//#define Cyan = QColor(0, 228, 255, 255)
+//#define Black = QColor(0, 0, 0, 255)
+//#define White = QColor(255, 255, 255, 255)
 
 //Icons
 #define bomPic ":/icons/Bomb.png"

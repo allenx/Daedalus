@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QMenu>
 #include "headerwrapper.h"
+#include "ai.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void bindAIToUI(AI *, MainWindow *);
 
 private:
     Ui::MainWindow *ui;
@@ -34,14 +36,14 @@ private:
 
 signals:
     void newWindowPopped();
-    void restart();
 
 public slots:
     void openAboutPage();
     void openPreferencesPage();
-    void sendNewGameSignal();
+//    void sendNewGameSignal();
     void showWinningResults();
     void showFailure();
+    void refreshUI();
 //    void newGame();
 //    void restart();
 

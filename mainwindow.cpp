@@ -11,6 +11,7 @@
 #include "aboutpage.h"
 #include "preferences.h"
 #include "stopwatch.h"
+#include <QtAlgorithms>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,17 +29,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle("Daedalus -- A MineSweeper Game");
     setStyleSheet("background-color: black");
+//    this->setFixedSize(1000, 1000);
+    bindAIToUI(&AI::sharedInstance(), this);
 
     alignmentGroupOfMore->setExclusive(true);
     alignmentGroupOfMore->addAction(preferencesAct);
     alignmentGroupOfMore->addAction(aboutAct);
 
-    connect(newGameAct, SIGNAL(triggered(bool)), this, SLOT(sendNewGameSignal()));
-    connect(restartAct, SIGNAL(triggered(bool)), this, SLOT(sendNewGameSignal()));
+    connect(newGameAct, SIGNAL(triggered(bool)), &AI::sharedInstance(), SLOT(userClickedRestart()));
+    connect(restartAct, SIGNAL(triggered(bool)), &AI::sharedInstance(), SLOT(userClickedRestart()));
     connect(preferencesAct, SIGNAL(triggered(bool)), this, SLOT(openPreferencesPage()));
     connect(aboutAct, SIGNAL(triggered(bool)), this, SLOT(openAboutPage()));
 
-    //QObject::connect(this, SIGNAL(newWindowPopped()),
 
     //group alignment so that they are mutual exclusive
     QList<QAction *> gameOptionsMenuActionsGroup = QList<QAction *>();
@@ -54,7 +56,6 @@ MainWindow::MainWindow(QWidget *parent) :
     GameField *field = new GameField;
     StopWatch *stopWatch = new StopWatch;
 
-    connect(this, SIGNAL(restart()), &AI::sharedInstance(), SLOT(restart()));
     QVBoxLayout *vLayout = new QVBoxLayout;
     //QPushButton *btn1 = new QPushButton(QIcon(smilePic));
     QHBoxLayout *hLayout = new QHBoxLayout;
@@ -107,13 +108,17 @@ void MainWindow::openPreferencesPage() {
 }
 
 void MainWindow::showWinningResults() {
-    WinningDialog *foo = new WinningDialog();
+    WinningDialog *foo = new WinningDialog;
+    QObject::disconnect(&AI::sharedInstance(), SIGNAL(steppedOnAMine(Cell*)), this, SLOT(showFailure()));
     foo->show();
     emit newWindowPopped();
 }
 
 void MainWindow::showFailure() {
     DefeatedDialog *foo = new DefeatedDialog();
+//    disconnect(&AI::sharedInstance(), SIGNAL(steppedOnAMine(Cell*)), SLOT(showFailure()));
+    QObject::disconnect(&AI::sharedInstance(), SIGNAL(steppedOnAMine(Cell*)), this, SLOT(showFailure()));
+    QObject::disconnect(&AI::sharedInstance(), SIGNAL(succeeded()), this, SLOT(showWinningResults()));
     foo->show();
     emit newWindowPopped();
 }
@@ -126,6 +131,32 @@ void MainWindow::showFailure() {
 //    emit restart();
 //}
 
-void MainWindow::sendNewGameSignal() {
-    emit restart();
+void MainWindow::refreshUI() {
+    GameField *field = new GameField;
+    StopWatch *stopWatch = new StopWatch;
+
+    qDeleteAll(this->centralWidget()->children());
+
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    //QPushButton *btn1 = new QPushButton(QIcon(smilePic));
+    QHBoxLayout *hLayout = new QHBoxLayout;
+    QLabel *placeHolder1 = new QLabel;
+    QLabel *placeHolder2 = new QLabel;
+    hLayout->addWidget(placeHolder1);
+    hLayout->addWidget(stopWatch);
+    hLayout->addWidget(placeHolder2);
+    vLayout->addLayout(hLayout);
+//    vLayout->addWidget(stopWatch);
+    vLayout->addWidget(field);
+    this->centralWidget()->setLayout(vLayout);
+}
+
+
+void MainWindow::bindAIToUI(AI *ai, MainWindow *window) {
+    QObject::connect(ai, SIGNAL(steppedOnAMine(Cell*)), this, SLOT(showFailure()));
+    QObject::connect(ai, SIGNAL(succeeded()), this, SLOT(showWinningResults()));
+    QObject::connect(ai, SIGNAL(reloadGame()), this, SLOT(refreshUI()));
+    QObject::connect(this, SIGNAL(newWindowPopped()), ai, SIGNAL(newWindowPopped()));
+
+
 }

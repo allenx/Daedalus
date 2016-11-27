@@ -9,6 +9,7 @@ GameField::GameField(QWidget *parent) :
     gridLayout(new QGridLayout)
 
 {
+    //setFixedSize(1000, 1000);
     CellMatrix *cells = AI::sharedInstance().cells;
     //CellMatrix *cells = ai->cells;
 
@@ -25,10 +26,10 @@ GameField::GameField(QWidget *parent) :
 
     scrollView = new QScrollArea(this);
     scrollView->setWidget(client);
+    //scrollView->setFixedSize(800, 800);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(scrollView);
-    //setFixedSize(800, 800);
     //setSizePolicy();
     setLayout(layout);
 
