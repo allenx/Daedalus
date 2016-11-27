@@ -19,12 +19,12 @@ DefeatedDialog::DefeatedDialog()
     hLayout->addWidget(frownFaceLabel);
     hLayout->addWidget(new QLabel);
 
-    QPushButton *okBtn = new QPushButton("OKay");
-    connect(okBtn, SIGNAL(released()), this, SLOT(done(int)));
-    okBtn->setStyleSheet("background-color: blue, text-color:white");
+//    QPushButton *okBtn = new QPushButton("OKay");
+//    connect(okBtn, SIGNAL(released()), this, SLOT(done(int)));
+
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addLayout(hLayout);
     vLayout->addWidget(defeatedLabel);
-    vLayout->addWidget(okBtn);
+    //vLayout->addWidget(okBtn);
     this->setLayout(vLayout);
 }

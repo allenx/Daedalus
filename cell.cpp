@@ -114,7 +114,7 @@ FlatList *Cell::cellsAround() {
 
     FlatList *foo = new FlatList;
     if (-2 == content) {
-        qDebug("Cells are not initialized yet");
+//        qDebug("Cells are not initialized yet");
         return NULL;
     }
     if (North->content != -2) foo->append(North);

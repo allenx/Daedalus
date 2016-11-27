@@ -30,7 +30,7 @@ class Cell : public QLabel
 public:
     Coordinate coordinate;
     int content;//0 - 8 means the numbers of mines around the cell.
-    //-1 means it's a mine itself and -2 means it hasn't been handled by the AI yet.
+    //-1 means it's a mine itself and -2 means it hasn't been initialized by the AI yet.
     bool isMine;
     Status status;
     void setStatus(Status);
@@ -50,7 +50,6 @@ signals:
     void hovered();
     void clicked(Cell *, QMouseEvent *);
     void clicked_double(Cell *, QMouseEvent *);
-    void wasRevealed(Cell *, QMouseEvent *);
     void statusChanged();
 
 public slots:

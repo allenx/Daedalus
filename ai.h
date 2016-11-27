@@ -82,18 +82,18 @@ public:
     //Preferences *preferences;
     CellMatrix *cells;
     FlatList *mines;
-    int flaggedCount;
+    //This could help the user see how many flags he's set
+//    int flaggedCocunt;
     QString time;
     Board board;
-    void layMines(Cell *);
+    void layMines(Cell *clickedCell);
     void countNeighbourMines(CellMatrix *cells);
-    void judge();
     void revealCell(Cell *);
+    void judge();
 
 signals:
     void steppedOnAMine(Cell *);
     void gameInitialized();
-    void gameStarted();
     void waitingForTheTime();
     void succeeded();
     void reloadGame();

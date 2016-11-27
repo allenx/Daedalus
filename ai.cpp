@@ -4,7 +4,7 @@
 
 AI::AI() :
     mines(new FlatList),
-    flaggedCount(0),
+    //flaggedCount(0),
     board(Board()),
     _interactionHandler(new UserInteractionHandler(this)),
     _soundHandler(new SoundHandler(this))
@@ -85,7 +85,6 @@ CellMatrix *AI::initCells(int rowCount, int columnCount) {
 
             //Binds Signals and Slots
             bindCellsToInteractionHandler(foo, _interactionHandler);
-
 
             foo->NorthWest = cells->at(k-1)->at(l-1);
             foo->North = cells->at(k-1)->at(l);
@@ -196,7 +195,6 @@ void AI::revealCell(Cell *cell) {
 
     if (-2 == cell->content) {
         layMines(cell);
-        emit gameStarted();
     }
 
     if (cell->status == revealed && cell->content != 0) {
@@ -286,7 +284,7 @@ void AI::revealCell(Cell *cell) {
                 }
             }
             emit steppedOnAMine(cell);
-            qDebug("stepped on a mine!");
+//            qDebug("stepped on a mine!");
             break;
         }
 
