@@ -157,6 +157,4 @@ void MainWindow::bindAIToUI(AI *ai, MainWindow *window) {
     QObject::connect(ai, SIGNAL(succeeded()), this, SLOT(showWinningResults()));
     QObject::connect(ai, SIGNAL(reloadGame()), this, SLOT(refreshUI()));
     QObject::connect(this, SIGNAL(newWindowPopped()), ai, SIGNAL(newWindowPopped()));
-
-
 }

@@ -4,6 +4,8 @@
 #include "headerwrapper.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QPushButton>
+
 
 DefeatedDialog::DefeatedDialog()
 {
@@ -16,8 +18,13 @@ DefeatedDialog::DefeatedDialog()
     hLayout->addWidget(new QLabel);
     hLayout->addWidget(frownFaceLabel);
     hLayout->addWidget(new QLabel);
+
+    QPushButton *okBtn = new QPushButton("OKay");
+    connect(okBtn, SIGNAL(released()), this, SLOT(done(int)));
+    okBtn->setStyleSheet("background-color: blue, text-color:white");
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addLayout(hLayout);
     vLayout->addWidget(defeatedLabel);
+    vLayout->addWidget(okBtn);
     this->setLayout(vLayout);
 }
