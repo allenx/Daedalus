@@ -79,7 +79,7 @@ void Preferences::accept() {
         connect(this, SIGNAL(accepted()), this, SIGNAL(dismissed()));
         emit accepted(this);
     } else {
-        qDebug("nullll");
+        qDebug("nullptrll");
     }
 }
 

@@ -13,28 +13,28 @@
 //Iterates the 8 pointers of a cell and apply the lambda function to them
 template<typename Lambda>
 void iterateCellsAround(Cell *cell, Lambda &&func) {
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         func(cell->North);
     }
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         func(cell->NorthEast);
     }
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         func(cell->NorthWest);
     }
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         
     }
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         
     }
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         
     }
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         
     }
-    if (cell->North != NULL) {
+    if (cell->North != nullptr) {
         
     }
     

@@ -59,10 +59,10 @@ CellMatrix *AI::initCells(int rowCount, int columnCount) {
     //        cells->append(new QList<Cell *>);
     //        for (int j = 0; j < columnCount + 2; ++j) {
     //            if (0 == i || rowCount + 1 == i) {
-    //                cells->at(0)->append(NULL);
+    //                cells->at(0)->append(nullptr);
     //            } else {
     //                if (0 == j || columnCount + 1 == j) {
-    //                    cells->at(i)->append(NULL);
+    //                    cells->at(i)->append(nullptr);
     //                    continue;
     //                }
     //                Cell *foo = new Cell(i, j);
@@ -174,7 +174,7 @@ void AI::countNeighbourMines(CellMatrix *cells) {
                 foo->content += 1;
             }
 
-            //            if (foo->cellsAround() != NULL) {
+            //            if (foo->cellsAround() != nullptr) {
             //                FlatList *fooList = foo->cellsAround();
             //                for (int i=0; i<fooList->count(); ++i) {
             //                    if (fooList->at(i)->isMine) {
@@ -250,7 +250,7 @@ void AI::revealCell(Cell *cell) {
         //            fooListToReveal->append(cell->NorthWest);
         //        }
 
-        if (cell->cellsAround() != NULL) {
+        if (cell->cellsAround() != nullptr) {
             FlatList *fooList = cell->cellsAround();
             for (int i=0; i<fooList->count(); ++i) {
                 if (fooList->at(i)->status == flagged) {
@@ -341,7 +341,7 @@ void AI::revealCell(Cell *cell) {
             //                fooListToReveal->append(cell->NorthWest);
             //            }
 
-            if (cell->cellsAround() != NULL) {
+            if (cell->cellsAround() != nullptr) {
                 FlatList *fooList = cell->cellsAround();
                 for (int i=0; i<fooList->count(); ++i) {
                     if (fooList->at(i)->status == flagged) {

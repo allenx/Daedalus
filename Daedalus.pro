@@ -12,6 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Daedalus
 TEMPLATE = app
 
+QMAKE_MAC_SDK = macosx10.12
 
 SOURCES += main.cpp\
         mainwindow.cpp \
