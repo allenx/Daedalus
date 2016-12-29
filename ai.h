@@ -5,7 +5,6 @@
 #include "soundhandler.h"
 #include <QList>
 
-
 #include "userinteractionhandler.h"
 #include "preferences.h"
 #include "headerwrapper.h"
@@ -16,26 +15,26 @@ void iterateCellsAround(Cell *cell, Lambda &&func) {
     if (cell->North != nullptr) {
         func(cell->North);
     }
-    if (cell->North != nullptr) {
+    if (cell->NorthEast != nullptr) {
         func(cell->NorthEast);
     }
-    if (cell->North != nullptr) {
+    if (cell->NorthWest != nullptr) {
         func(cell->NorthWest);
     }
-    if (cell->North != nullptr) {
-        
+    if (cell->South != nullptr) {
+        func(cell->South);
     }
-    if (cell->North != nullptr) {
-        
+    if (cell->SouthEast != nullptr) {
+        func(cell->SouthEast);
     }
-    if (cell->North != nullptr) {
-        
+    if (cell->SouthWest != nullptr) {
+        func(cell->SouthWest);
     }
-    if (cell->North != nullptr) {
-        
+    if (cell->East != nullptr) {
+        func(cell->East);
     }
-    if (cell->North != nullptr) {
-        
+    if (cell->West != nullptr) {
+        func(cell->West);
     }
     
     
