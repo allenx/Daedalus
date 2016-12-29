@@ -2,8 +2,7 @@
 
 > A MineSweeper Game built with Qt
 
-
-
+[中文版](https://github.com/allenx/Daedalus/blob/master/README_zhcn.md)
 ## Build & Run
 
 - Qt 5.7 or later
