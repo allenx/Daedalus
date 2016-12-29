@@ -113,7 +113,7 @@ for (int i=1; i<m+1; ++i) {
 
 #### Turning Over and Recursive Turning Over
 
-![](http://ogbzxx07e.bkt.clouddn.com/revealCellDiagram.png)
+![](http://ogbzxx07e.bkt.clouddn.com/cool.png)
 
 Below is my **Recursive Turning Over** pseudo code:
 
